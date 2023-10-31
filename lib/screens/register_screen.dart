@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_flutter_firebse/screens/home_screen.dart';
 import 'package:learn_flutter_firebse/screens/login_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -12,6 +13,8 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   bool isLoading = false;
@@ -56,6 +59,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
+// add user to firebase firestore
+  Future<void> addUser() async {
+    CollectionReference collection =
+        await FirebaseFirestore.instance.collection('users');
+
+    var user = collection.add(
+        {"name": "Bilal", "email": "mbilal@gmail.com", "phone": 032012334567});
+
+    user.then((value) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("user add Successfully"),
+        ),
+      );
+      print("Value $value ${user}");
+    }).catchError((e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("user add Failed"),
+        ),
+      );
+      print("Error $e");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,6 +95,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            TextField(
+              controller: _nameController,
+              decoration: const InputDecoration(
+                label: Text("Name"),
+              ),
+            ),
+            TextField(
+              keyboardType: TextInputType.phone,
+              controller: _phoneController,
+              decoration: const InputDecoration(
+                label: Text("Phone"),
+              ),
+            ),
             TextField(
               controller: _emailController,
               decoration: const InputDecoration(
@@ -84,7 +125,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                register();
+                // register();
+                addUser();
               },
               child: !isLoading
                   ? const Text("Sign Up")
@@ -102,7 +144,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     );
                   },
-                  child: const Text("Create Account"),
+                  child: const Text("Login"),
                 ),
               ],
             ),

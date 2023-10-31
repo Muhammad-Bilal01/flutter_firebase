@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:learn_flutter_firebse/firebase_options.dart';
 import 'package:learn_flutter_firebse/screens/future_and_stream.dart';
 import 'package:learn_flutter_firebse/screens/login_screen.dart';
+import 'package:learn_flutter_firebse/screens/register_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const FutureAndStream(),
+      home: const RegisterScreen(),
     );
   }
 }
